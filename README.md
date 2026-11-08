@@ -21,7 +21,7 @@ account. Jev answers two questions in one request:
 
 | Question | Jev type | Output |
 |---|---|---|
-| Which typology? `NORMAL`, `CASH_OUT_FRAUD`, `ACCOUNT_TAKEOVER`, `SYNTHETIC_ID`, `STRUCTURING_AML` | `choice` | label + probability per class |
+| Which typology? `NORMAL`, `MONEY_MULE`, `ACCOUNT_TAKEOVER`, `SYNTHETIC_ID`, `STRUCTURING_AML` | `choice` | label + probability per class |
 | Hold for fraud/AML review before settlement? | `noul` | p(yes) |
 
 GPT-4o-mini gets the same two questions through Structured Outputs. Its class probabilities are read from

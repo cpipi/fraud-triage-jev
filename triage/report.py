@@ -8,10 +8,11 @@ from typing import Any, Dict, List
 
 from triage.schema import TYPOLOGIES
 
-ORDER = ["jev", "gpt-4o-mini", "reference_model", "rules"]
+ORDER = ["jev", "gpt-4o-mini", "gpt-4o-mini-reasoning", "reference_model", "rules"]
 TITLES = {
     "jev": "Jev",
-    "gpt-4o-mini": "GPT-4o-mini",
+    "gpt-4o-mini": "GPT-4o-mini (label only)",
+    "gpt-4o-mini-reasoning": "GPT-4o-mini (reasoning first)",
     "reference_model": "Supervised ref. (ceiling)",
     "rules": "Analyst rules (floor)",
 }

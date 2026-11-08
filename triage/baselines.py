@@ -123,5 +123,5 @@ def rules_predict(alert: Dict[str, Any]) -> str:
     if s["ssn_verification_status"] != "MATCH" and s["account_age_days"] < 180:
         return "SYNTHETIC_ID"
     if s["hours_since_inbound_funding"] < 12 and drain >= 0.8:
-        return "CASH_OUT_FRAUD"
+        return "MONEY_MULE"
     return "NORMAL"

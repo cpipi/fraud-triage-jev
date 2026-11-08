@@ -19,7 +19,7 @@ from typing import Any, Dict, List
 
 TYPOLOGIES: List[str] = [
     "NORMAL",
-    "CASH_OUT_FRAUD",
+    "MONEY_MULE",
     "ACCOUNT_TAKEOVER",
     "SYNTHETIC_ID",
     "STRUCTURING_AML",
@@ -31,7 +31,7 @@ TYPOLOGY_CRITERIA: Dict[str, str] = {
         "phone, a large one-off payment or a young account are explained by the rest of the "
         "profile rather than pointing to fraud."
     ),
-    "CASH_OUT_FRAUD": (
+    "MONEY_MULE": (
         "Money-mule pass-through: the account receives funds and quickly moves most of the "
         "balance on to a new counterparty. The session looks like the genuine owner; the "
         "suspicious part is the flow of money, not the login."
@@ -86,6 +86,13 @@ JEV_QUESTIONS: Dict[str, Any] = {
 }
 
 
+# Added to the GPT-4o-mini prompt in its reasoning-first configuration only.
+REASONING_INSTRUCTION = (
+    "\nFirst write 2-4 sentences in `reasoning` weighing the signals for and against each "
+    "plausible typology, then give `typology` and `hold`."
+)
+
+
 def build_state(alert: Dict[str, Any]) -> Dict[str, Any]:
     """The exact model input. Labels, scenario names and data provenance are never included."""
     return {"transaction": alert["transaction"], "signals": alert["signals"]}
@@ -108,7 +115,11 @@ def build_llm_system_prompt() -> str:
 def criteria_sha256() -> str:
     """Fingerprint of everything that shapes the model's answer, recorded in every report."""
     blob = json.dumps(
-        {"jev_questions": JEV_QUESTIONS, "llm_system_prompt": build_llm_system_prompt()},
+        {
+            "jev_questions": JEV_QUESTIONS,
+            "llm_system_prompt": build_llm_system_prompt(),
+            "llm_reasoning_instruction": REASONING_INSTRUCTION,
+        },
         sort_keys=True,
     )
     return hashlib.sha256(blob.encode("utf-8")).hexdigest()

@@ -153,7 +153,8 @@ def main() -> None:
     p.add_argument("--split", choices=["test", "dev"], default="test")
     p.add_argument("--data-dir", type=Path, default=None,
                    help="Default: data/ if the PaySim-seeded split exists, else data/stand_in/")
-    p.add_argument("--models", default="jev,gpt-4o-mini", help="Comma list of: jev, gpt-4o-mini")
+    p.add_argument("--models", default="jev,gpt-4o-mini,gpt-4o-mini-reasoning",
+                   help="Comma list of: jev, gpt-4o-mini, gpt-4o-mini-reasoning")
     p.add_argument("--limit", type=int, default=None)
     p.add_argument("--concurrency", type=int, default=8, help="Max in-flight requests per model")
     p.add_argument("--run-name", default=None)
@@ -186,16 +187,20 @@ def main() -> None:
             if not key:
                 sys.exit("TYPESAFE_API_KEY is not set (add it to .env).")
             clients.append(JevClient(key))
-        if "gpt-4o-mini" in wanted:
+        gpt_configs = [m for m in ("gpt-4o-mini", "gpt-4o-mini-reasoning") if m in wanted]
+        if gpt_configs:
             key = read_key("OPENAI_API_KEY")
             if not key:
                 sys.exit("OPENAI_API_KEY is not set. Add it, or pass --models jev for a Jev-only run.")
-            clients.append(OpenAIClient(key))
+            for m in gpt_configs:
+                clients.append(OpenAIClient(key, reasoning=m.endswith("reasoning")))
     else:
         if "jev" in wanted:
             clients.append(SimulatedClient("jev", 300, 0.90, seed=1))
         if "gpt-4o-mini" in wanted:
             clients.append(SimulatedClient("gpt-4o-mini", 700, 0.85, seed=2))
+        if "gpt-4o-mini-reasoning" in wanted:
+            clients.append(SimulatedClient("gpt-4o-mini-reasoning", 2500, 0.88, seed=3))
 
     # Reference points (no API calls)
     ref = reference_predictions(alerts, data_dir / "alerts_reference.jsonl")
@@ -233,7 +238,7 @@ def main() -> None:
         "dataset": {"path": str(data_path), "sha256": file_sha256(data_path), "n": len(alerts),
                     "limit": args.limit, "sources": sources},
         "criteria_sha256": criteria_sha256(),
-        "models_requested": {"jev": JEV_MODEL, "gpt-4o-mini": GPT_MODEL},
+        "models_requested": {"jev": JEV_MODEL, "gpt-4o-mini": GPT_MODEL, "gpt-4o-mini-reasoning": GPT_MODEL},
         "models_served": served,
         "concurrency_per_model": args.concurrency,
         "client_region": args.client_region,

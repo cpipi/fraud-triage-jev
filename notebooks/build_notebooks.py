@@ -85,7 +85,7 @@ panels = [
     ("account_age_days", "Account age, days (log)", True),
     ("transfers_8k_to_10k_24h", "Transfers of \\\\$8k–\\\\$10k in 24h", False),
 ]
-NICE = {"NORMAL": "Normal", "CASH_OUT_FRAUD": "Cash-out fraud", "ACCOUNT_TAKEOVER": "Account takeover",
+NICE = {"NORMAL": "Normal", "MONEY_MULE": "Money mule", "ACCOUNT_TAKEOVER": "Account takeover",
         "SYNTHETIC_ID": "Synthetic ID", "STRUCTURING_AML": "Structuring (AML)"}
 fig, axes = plt.subplots(2, 3, figsize=(12, 6.2), constrained_layout=True)
 for ax, (col, title, log) in zip(axes.flat, panels):
@@ -111,7 +111,7 @@ pairs = [("NORMAL/new_device_large_payment", "ACCOUNT_TAKEOVER/domestic_proxy"),
          ("NORMAL/traveler_no_notice_large", "ACCOUNT_TAKEOVER/session_hijack"),
          ("NORMAL/payroll_batch", "STRUCTURING_AML/light"),
          ("NORMAL/new_customer", "SYNTHETIC_ID/sleeper"),
-         ("CASH_OUT_FRAUD/mule_new_phone", "ACCOUNT_TAKEOVER/domestic_proxy")]
+         ("MONEY_MULE/mule_new_phone", "ACCOUNT_TAKEOVER/domestic_proxy")]
 ref_df = flat(reference); ref_df["full"] = ref_df.typology + "/" + ref_df.scenario
 cols = ["drain_ratio", "is_known_device", "device_risk_score", "hours_since_credential_change",
         "failed_login_attempts_24h", "hours_since_inbound_funding", "recipient_is_first_time",
@@ -207,8 +207,8 @@ RUN_DIR = latest_run()
 report = json.loads((RUN_DIR / "report.json").read_text())
 rows = load_jsonl(RUN_DIR / "predictions.jsonl")
 meta = report["meta"]
-MODELS = [m for m in ["jev", "gpt-4o-mini", "reference_model", "rules"] if m in rows[0]]
-API = [m for m in MODELS if m in ("jev", "gpt-4o-mini")]
+MODELS = [m for m in ["jev", "gpt-4o-mini", "gpt-4o-mini-reasoning", "reference_model", "rules"] if m in rows[0]]
+API = [m for m in MODELS if m.startswith(("jev", "gpt"))]
 PROB = [m for m in MODELS if m != "rules"]
 print(RUN_DIR.relative_to(ROOT), "| mode:", meta["mode"], "| publishable:", meta["publishable"], "| n:", meta["dataset"]["n"])
 if not meta["publishable"]:
@@ -333,21 +333,22 @@ if API:
     for ax, m in zip(axes[0], API):
         hp = np.array([r[m]["hold_prob"] if r[m]["ok"] else np.nan for r in rows])
         bins = np.linspace(0, 1, 21)
-        ax.hist(hp[~hold_truth], bins=bins, color=MODEL_COLORS["jev"], alpha=0.85, label="legitimate", edgecolor="#fcfcfb")
-        ax.hist(hp[hold_truth], bins=bins, color=MODEL_COLORS["gpt-4o-mini"], alpha=0.75, label="fraud / AML", edgecolor="#fcfcfb")
+        ax.hist(hp[~hold_truth], bins=bins, color="#2a78d6", alpha=0.85, label="legitimate", edgecolor="#fcfcfb")
+        ax.hist(hp[hold_truth], bins=bins, color="#eb6834", alpha=0.75, label="fraud / AML", edgecolor="#fcfcfb")
         for x in (0.3, 0.7): ax.axvline(x, color=INK, linewidth=1, linestyle=":")
         ax.set_title(f"{MODEL_TITLES[m]}: p(hold)", loc="left"); ax.set_xlabel("p(hold)"); ax.legend()
     plt.show()
     display(pd.DataFrame({MODEL_TITLES[m]: report["models"][m]["hold_gate"] for m in API}))
 """),
-    md("## Where Jev and GPT-4o-mini disagree"),
+    md("## Where Jev and GPT-4o-mini (best configuration) disagree"),
     code("""
-if set(API) == {"jev", "gpt-4o-mini"}:
+GPT_BEST = "gpt-4o-mini-reasoning" if "gpt-4o-mini-reasoning" in API else "gpt-4o-mini"
+if "jev" in API and GPT_BEST in API:
     dis = [{"alert": r["alert_id"], "scenario": r["label"]["scenario"], "truth": r["label"]["typology"],
             "jev": pred("jev")[i], "p_jev": round(p_pred("jev")[i], 2),
-            "gpt": pred("gpt-4o-mini")[i], "p_gpt": round(p_pred("gpt-4o-mini")[i], 2),
+            "gpt": pred(GPT_BEST)[i], "p_gpt": round(p_pred(GPT_BEST)[i], 2),
             "ref_p_true": round(r["reference_p_true"], 2) if r["reference_p_true"] is not None else None}
-           for i, r in enumerate(rows) if pred("jev")[i] != pred("gpt-4o-mini")[i]]
+           for i, r in enumerate(rows) if pred("jev")[i] != pred(GPT_BEST)[i]]
     dis = pd.DataFrame(dis)
     print(f"{len(dis)} disagreements; Jev right on {(dis.jev == dis.truth).sum()}, GPT right on {(dis.gpt == dis.truth).sum()}")
     display(dis.head(40))

@@ -28,7 +28,13 @@ from typing import Any, Dict, List, Optional, Tuple
 import httpx
 import numpy as np
 
-from triage.schema import JEV_QUESTIONS, TYPOLOGIES, build_llm_system_prompt, build_state
+from triage.schema import (
+    JEV_QUESTIONS,
+    REASONING_INSTRUCTION,
+    TYPOLOGIES,
+    build_llm_system_prompt,
+    build_state,
+)
 
 JEV_ENDPOINT = "https://api.typesafe.ai/v1/systemone"
 OPENAI_ENDPOINT = "https://api.openai.com/v1/chat/completions"
@@ -217,7 +223,7 @@ def _value_distribution(
     its mass equally between them.
     """
     marker = f'"{key}":'
-    start = content.index(marker) + len(marker)
+    start = content.rindex(marker) + len(marker)  # last occurrence: the key, not text inside `reasoning`
     while content[start] in ' "':
         start += 1
     idx, tok_start = _token_at(tokens, start)
@@ -255,23 +261,50 @@ def parse_gpt_response(data: Dict[str, Any]) -> Tuple[str, Dict[str, float], flo
     return predicted, probs, hold_dist["true"], coverage, "logprobs"
 
 
-class OpenAIClient:
-    name = "gpt-4o-mini"
+GPT_REASONING_RESPONSE_FORMAT: Dict[str, Any] = {
+    "type": "json_schema",
+    "json_schema": {
+        "name": "fraud_triage_reasoned",
+        "strict": True,
+        "schema": {
+            "type": "object",
+            "properties": {
+                "reasoning": {"type": "string"},
+                "typology": {"type": "string", "enum": TYPOLOGIES},
+                "hold": {"type": "boolean"},
+            },
+            "required": ["reasoning", "typology", "hold"],
+            "additionalProperties": False,
+        },
+    },
+}
 
-    def __init__(self, api_key: str, model: str = GPT_MODEL):
+
+class OpenAIClient:
+    """GPT-4o-mini baseline in two configurations:
+
+    - label-only (`reasoning=False`): answers immediately; fastest and cheapest.
+    - reasoning-first (`reasoning=True`): writes a short rationale before the label, which
+      is how a careful team would deploy a generative model. Costs more output tokens
+      and latency. Probabilities are still read at the first token of the label.
+    """
+
+    def __init__(self, api_key: str, model: str = GPT_MODEL, reasoning: bool = False):
         self.model = model
+        self.reasoning = reasoning
+        self.name = "gpt-4o-mini-reasoning" if reasoning else "gpt-4o-mini"
         self.headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-        self.system_prompt = build_llm_system_prompt()
+        self.system_prompt = build_llm_system_prompt() + (REASONING_INSTRUCTION if reasoning else "")
 
     def payload(self, alert: Dict[str, Any]) -> Dict[str, Any]:
         return {
             "model": self.model,
             "temperature": 0,
             "seed": 42,
-            "max_tokens": 40,
+            "max_tokens": 400 if self.reasoning else 40,
             "logprobs": True,
             "top_logprobs": 20,
-            "response_format": GPT_RESPONSE_FORMAT,
+            "response_format": GPT_REASONING_RESPONSE_FORMAT if self.reasoning else GPT_RESPONSE_FORMAT,
             "messages": [
                 {"role": "system", "content": self.system_prompt},
                 {"role": "user", "content": json.dumps(build_state(alert), separators=(",", ":"))},

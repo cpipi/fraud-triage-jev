@@ -27,7 +27,7 @@ def test_generator_is_deterministic(alerts):
 def test_generator_schema_and_invariants(alerts):
     gd.validate(alerts)
     counts = {t: sum(a["label"]["typology"] == t for a in alerts) for t in TYPOLOGIES}
-    assert counts == {"NORMAL": 120, "CASH_OUT_FRAUD": 45, "ACCOUNT_TAKEOVER": 45,
+    assert counts == {"NORMAL": 120, "MONEY_MULE": 45, "ACCOUNT_TAKEOVER": 45,
                       "SYNTHETIC_ID": 45, "STRUCTURING_AML": 45}
 
 
@@ -43,7 +43,7 @@ def test_parse_jev_response():
         "model": "jev-1.14.0",
         "answers": {
             "typology": {"type": "choice", "choice": "SYNTHETIC_ID", "confidence": 0.775,
-                         "probabilities": {"NORMAL": 0.02, "CASH_OUT_FRAUD": 0.16, "ACCOUNT_TAKEOVER": 0.0,
+                         "probabilities": {"NORMAL": 0.02, "MONEY_MULE": 0.16, "ACCOUNT_TAKEOVER": 0.0,
                                            "SYNTHETIC_ID": 0.82, "STRUCTURING_AML": 0.0}},
             "hold": {"type": "noul", "noul": 0.78},
         },
@@ -65,21 +65,22 @@ def _lp(token, alts):
 
 
 def test_parse_gpt_logprobs_real_token_layout():
-    # Token layout observed from gpt-4o-mini-2024-07-18 with strict json_schema output.
-    content = '{"typology":"CASH_OUT_FRAUD","hold":true}'
+    # Token layout observed from gpt-4o-mini-2024-07-18 with strict json_schema output
+    # (the label is split into several tokens; probabilities live on the first one).
+    content = '{"typology":"MONEY_MULE","hold":true}'
     toks = [
         _lp('{"', [('{"', 1.0)]), _lp("typ", [("typ", 1.0)]), _lp("ology", [("ology", 1.0)]),
         _lp('":"', [('":"', 1.0)]),
-        _lp("C", [("C", 0.70), ("ACCOUNT", 0.20), ("S", 0.08), ("NORMAL", 0.02)]),
-        _lp("ASH", [("ASH", 1.0)]), _lp("_OUT", [("_OUT", 1.0)]), _lp("_F", [("_F", 1.0)]),
-        _lp("RA", [("RA", 1.0)]), _lp("UD", [("UD", 1.0)]), _lp('","', [('","', 1.0)]),
+        _lp("M", [("M", 0.70), ("ACCOUNT", 0.20), ("S", 0.08), ("NORMAL", 0.02)]),
+        _lp("ONEY", [("ONEY", 1.0)]), _lp("_M", [("_M", 1.0)]), _lp("ULE", [("ULE", 1.0)]),
+        _lp('","', [('","', 1.0)]),
         _lp("hold", [("hold", 1.0)]), _lp('":', [('":', 1.0)]),
         _lp("true", [("true", 0.9), (" true", 0.02), ("false", 0.08)]), _lp("}", [("}", 1.0)]),
     ]
     data = {"choices": [{"message": {"content": content}, "logprobs": {"content": toks}}]}
     predicted, probs, hold, coverage, source = parse_gpt_response(data)
-    assert predicted == "CASH_OUT_FRAUD" and source == "logprobs"
-    assert math.isclose(probs["CASH_OUT_FRAUD"], 0.70, abs_tol=1e-6)
+    assert predicted == "MONEY_MULE" and source == "logprobs"
+    assert math.isclose(probs["MONEY_MULE"], 0.70, abs_tol=1e-6)
     assert math.isclose(probs["ACCOUNT_TAKEOVER"], 0.20, abs_tol=1e-6)
     assert math.isclose(probs["SYNTHETIC_ID"], 0.04, abs_tol=1e-6)  # "S" is split two ways
     assert math.isclose(probs["STRUCTURING_AML"], 0.04, abs_tol=1e-6)
@@ -104,9 +105,9 @@ def test_errors_count_as_misses():
 
 
 def test_settlement_uses_predicted_class_probability():
-    truth = ["NORMAL", "CASH_OUT_FRAUD"]
-    p1 = {"NORMAL": 0.9, "CASH_OUT_FRAUD": 0.1, "ACCOUNT_TAKEOVER": 0, "SYNTHETIC_ID": 0, "STRUCTURING_AML": 0}
-    p2 = {"NORMAL": 0.86, "CASH_OUT_FRAUD": 0.14, "ACCOUNT_TAKEOVER": 0, "SYNTHETIC_ID": 0, "STRUCTURING_AML": 0}
+    truth = ["NORMAL", "MONEY_MULE"]
+    p1 = {"NORMAL": 0.9, "MONEY_MULE": 0.1, "ACCOUNT_TAKEOVER": 0, "SYNTHETIC_ID": 0, "STRUCTURING_AML": 0}
+    p2 = {"NORMAL": 0.86, "MONEY_MULE": 0.14, "ACCOUNT_TAKEOVER": 0, "SYNTHETIC_ID": 0, "STRUCTURING_AML": 0}
     rows = {r["tau"]: r for r in settlement(truth, [_pred("NORMAL", p1), _pred("NORMAL", p2)])}
     assert rows[0.85]["settled"] == 2 and rows[0.85]["fraud_auto_cleared"] == 1
     assert rows[0.90]["settled"] == 1 and rows[0.90]["fraud_auto_cleared"] == 0
@@ -125,3 +126,17 @@ def test_paired_bootstrap_identical_models_have_zero_difference():
     preds = [_pred(str(t)) for t in rng.choice(TYPOLOGIES, 60)]
     out = paired_bootstrap(truth, {"a": preds, "b": preds}, n_boot=200)
     assert out["differences"]["a - b"]["macro_f1"]["ci95"] == [0.0, 0.0]
+
+
+def test_parse_gpt_reasoning_first_reads_label_token_not_reasoning_text():
+    content = '{"reasoning":"Mentions \\"typology\\": oddly.","typology":"NORMAL","hold":false}'
+    prefix = '{"reasoning":"Mentions \\"typology\\": oddly.","typology":"'
+    toks = [_lp(prefix, [(prefix, 1.0)]),
+            _lp("NORMAL", [("NORMAL", 0.6), ("ACCOUNT", 0.4)]),
+            _lp('","hold":', [('","hold":', 1.0)]),
+            _lp("false", [("false", 0.75), ("true", 0.25)]), _lp("}", [("}", 1.0)])]
+    data = {"choices": [{"message": {"content": content}, "logprobs": {"content": toks}}]}
+    predicted, probs, hold, _, _ = parse_gpt_response(data)
+    assert predicted == "NORMAL"
+    assert math.isclose(probs["NORMAL"], 0.6, abs_tol=1e-6)
+    assert math.isclose(hold, 0.25, abs_tol=1e-6)

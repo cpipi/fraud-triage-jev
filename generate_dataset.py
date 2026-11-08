@@ -59,7 +59,7 @@ SPLIT_SLICES: Dict[str, Tuple[float, float]] = {  # fraction of each shuffled po
 
 CLASS_MIX: Dict[str, float] = {
     "NORMAL": 0.40,
-    "CASH_OUT_FRAUD": 0.15,
+    "MONEY_MULE": 0.15,
     "ACCOUNT_TAKEOVER": 0.15,
     "SYNTHETIC_ID": 0.15,
     "STRUCTURING_AML": 0.15,
@@ -78,7 +78,7 @@ SCENARIOS: Dict[str, Dict[str, Tuple[float, str]]] = {
         "traveler_no_notice_large": (0.03, "normal_large"),  # ~ ACCOUNT_TAKEOVER/session_hijack
         "payroll_batch": (0.04, "near_threshold"),  # ~ STRUCTURING_AML/light
     },
-    "CASH_OUT_FRAUD": {
+    "MONEY_MULE": {
         "mule_known_session": (0.80, "fraud"),
         "mule_new_phone": (0.20, "fraud"),  # ~ ACCOUNT_TAKEOVER/domestic_proxy
     },
@@ -378,7 +378,7 @@ def apply_scenario(
             s["distinct_counterparties_24h"] = s["transfers_8k_to_10k_24h"]
             s["recipient_is_first_time"] = bool(rng.random() < 0.15)
 
-    elif typology == "CASH_OUT_FRAUD":
+    elif typology == "MONEY_MULE":
         s["hours_since_inbound_funding"] = _hours(rng, 3, 0.8, hi=2000)
         s["recipient_is_first_time"] = bool(rng.random() < 0.90)
         s["tx_count_1h"] = 1 + int(rng.poisson(1.5))

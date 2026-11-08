@@ -17,18 +17,20 @@ if str(ROOT) not in sys.path:
 MODEL_COLORS: Dict[str, str] = {
     "jev": "#2a78d6",
     "gpt-4o-mini": "#eb6834",
+    "gpt-4o-mini-reasoning": "#e87ba4",
     "reference_model": "#1baf7a",
     "rules": "#eda100",
 }
 MODEL_TITLES: Dict[str, str] = {
     "jev": "Jev",
-    "gpt-4o-mini": "GPT-4o-mini",
+    "gpt-4o-mini": "GPT-4o-mini (label only)",
+    "gpt-4o-mini-reasoning": "GPT-4o-mini (reasoning)",
     "reference_model": "Supervised ref. (ceiling)",
     "rules": "Analyst rules (floor)",
 }
 TYPOLOGY_COLORS: Dict[str, str] = {
     "NORMAL": "#2a78d6",
-    "CASH_OUT_FRAUD": "#eb6834",
+    "MONEY_MULE": "#eb6834",
     "ACCOUNT_TAKEOVER": "#1baf7a",
     "SYNTHETIC_ID": "#eda100",
     "STRUCTURING_AML": "#e87ba4",
