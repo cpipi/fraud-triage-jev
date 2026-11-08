@@ -1,0 +1,33 @@
+# Secrets (never commit API keys)
+.env
+.env.*
+*.key
+
+# Private correspondence and working notes (not for the public repo)
+docs/pedro_*.md
+docs/claude_system_prompt.md
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Raw public dataset (PaySim CSV is ~470 MB; download it from Kaggle, see README)
+data/raw/
+
+# Dry runs are plumbing checks only and must never be published
+results/dry_run/
+
+# OS & editor
+.DS_Store
+.idea/
+.vscode/
+
+# Earlier Gemini-built version, kept locally for reference only
+archive/
+
+# Stand-in data is regenerable and not publishable
+data/stand_in/
+results/live/smoke/

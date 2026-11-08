@@ -1,0 +1,1006 @@
+{
+  "meta": {
+    "mode": "live",
+    "publishable": true,
+    "timestamp_utc": "2026-11-08T17:12:23+00:00",
+    "wall_clock_s": 5.2,
+    "git": {
+      "commit": null,
+      "dirty": null
+    },
+    "dataset": {
+      "path": "data/alerts_dev.jsonl",
+      "sha256": "742eb3e6cc13c451f34700a7e6f061019a8f8372012146faf9f2de390ae9111f",
+      "n": 10,
+      "limit": 10,
+      "sources": [
+        "paysim"
+      ]
+    },
+    "criteria_sha256": "3ef0b060f2469f3883b2b77cdf0db7a4349495ab3a1a125ef2928761f3c363d5",
+    "models_requested": {
+      "jev": "jev-1.14.0",
+      "gpt-4o-mini": "gpt-4o-mini-2024-07-18"
+    },
+    "models_served": {
+      "jev": [
+        "jev-1.14.0"
+      ],
+      "gpt-4o-mini": [
+        "gpt-4o-mini-2024-07-18"
+      ]
+    },
+    "concurrency_per_model": 8,
+    "client_region": "unspecified",
+    "python": "3.12.13",
+    "argv": [
+      "--mode",
+      "live",
+      "--split",
+      "dev",
+      "--limit",
+      "10"
+    ],
+    "ambiguous_definition": "reference-model probability of the true class < 0.9"
+  },
+  "models": {
+    "jev": {
+      "n": 10,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.8,
+        "macro_f1": 0.72,
+        "weighted_f1": 0.76,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.8,
+            "recall": 0.8,
+            "f1": 0.8,
+            "support": 5
+          },
+          "CASH_OUT_FRAUD": {
+            "precision": 0.6666666666666666,
+            "recall": 1.0,
+            "f1": 0.8,
+            "support": 2
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "STRUCTURING_AML": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 4,
+            "CASH_OUT_FRAUD": 1,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "CASH_OUT_FRAUD": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 2,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 1,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 1,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 1,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "CASH_OUT_FRAUD/mule_known_session": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/routine": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "clear": {
+          "n": 9,
+          "accuracy": 0.8888888888888888
+        }
+      },
+      "calibration": {
+        "brier": 0.26261999999999996,
+        "log_loss": 0.47995820686449375,
+        "ece_top_label": 0.13400000000000004,
+        "reliability": [
+          {
+            "bin": "(0.4,0.5]",
+            "count": 1,
+            "mean_p_pred": 0.47,
+            "accuracy": 0.0
+          },
+          {
+            "bin": "(0.5,0.6]",
+            "count": 1,
+            "mean_p_pred": 0.51,
+            "accuracy": 1.0
+          },
+          {
+            "bin": "(0.8,0.9]",
+            "count": 5,
+            "mean_p_pred": 0.8400000000000001,
+            "accuracy": 0.8
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 3,
+            "mean_p_pred": 0.94,
+            "accuracy": 1.0
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 9,
+          "coverage": 0.9,
+          "accuracy": 0.8888888888888888,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.7,
+          "settled": 8,
+          "coverage": 0.8,
+          "accuracy": 0.875,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.8,
+          "settled": 8,
+          "coverage": 0.8,
+          "accuracy": 0.875,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.85,
+          "settled": 5,
+          "coverage": 0.5,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 3,
+          "coverage": 0.3,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 1,
+          "coverage": 0.1,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 0,
+          "coverage": 0.0,
+          "accuracy": NaN,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.78,
+        "brier": 0.1934,
+        "accuracy_at_0_5": 0.7,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 2,
+        "held": 3,
+        "sent_to_review": 5,
+        "fraud_released": 0,
+        "legit_held": 1
+      },
+      "latency": {
+        "n": 10,
+        "p50_ms": 389.42914598737843,
+        "p90_ms": 403.38907561963424,
+        "p90_ci95_ms": [
+          395.30726248631254,
+          404.2676250101067
+        ],
+        "p99_ms": 404.17977007105947,
+        "max_ms": 404.2676250101067,
+        "mean_ms": 360.1581085007638,
+        "e2e_p90_ms": 403.43845417373814,
+        "retried_calls": 0
+      },
+      "cost": {
+        "mean_input_tokens": 1071.8,
+        "mean_output_tokens": 90.5,
+        "usd_per_1k_alerts": 0.0450156,
+        "usd_total": 0.00045015600000000006
+      },
+      "probability_source": [
+        "native"
+      ]
+    },
+    "gpt-4o-mini": {
+      "n": 10,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.2,
+        "macro_f1": 0.07272727272727272,
+        "weighted_f1": 0.07272727272727272,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 5
+          },
+          "CASH_OUT_FRAUD": {
+            "precision": 0.2222222222222222,
+            "recall": 1.0,
+            "f1": 0.36363636363636365,
+            "support": 2
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "SYNTHETIC_ID": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 4,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 1,
+            "ERROR": 0
+          },
+          "CASH_OUT_FRAUD": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 2,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 1,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 1,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 1,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "CASH_OUT_FRAUD/mule_known_session": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/routine": {
+          "n": 4,
+          "accuracy": 0.0
+        },
+        "NORMAL/traveler": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 1,
+          "accuracy": 0.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "clear": {
+          "n": 9,
+          "accuracy": 0.2222222222222222
+        }
+      },
+      "calibration": {
+        "brier": 1.5754699698578647,
+        "log_loss": 8.807070085908212,
+        "ece_top_label": 0.7934526664152144,
+        "reliability": [
+          {
+            "bin": "(0.9,1.0]",
+            "count": 10,
+            "mean_p_pred": 0.9934526664152143,
+            "accuracy": 0.2
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.2,
+          "errors": 8,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.7,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.2,
+          "errors": 8,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.8,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.2,
+          "errors": 8,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.85,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.2,
+          "errors": 8,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.2,
+          "errors": 8,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 9,
+          "coverage": 0.9,
+          "accuracy": 0.2222222222222222,
+          "errors": 7,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 9,
+          "coverage": 0.9,
+          "accuracy": 0.2222222222222222,
+          "errors": 7,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.92,
+        "brier": 0.49999957076356055,
+        "accuracy_at_0_5": 0.5,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 0,
+        "held": 10,
+        "sent_to_review": 0,
+        "fraud_released": 0,
+        "legit_held": 5
+      },
+      "latency": {
+        "n": 10,
+        "p50_ms": 1646.9431254954543,
+        "p90_ms": 1891.469645802863,
+        "p90_ci95_ms": [
+          1672.31570801232,
+          1977.39058296429
+        ],
+        "p99_ms": 1968.7984892481472,
+        "max_ms": 1977.39058296429,
+        "mean_ms": 1555.2522875892464,
+        "e2e_p90_ms": 1891.8384956021328,
+        "retried_calls": 0
+      },
+      "cost": {
+        "mean_input_tokens": 706.2,
+        "mean_output_tokens": 14.9,
+        "usd_per_1k_alerts": 0.11486999999999999,
+        "usd_total": 0.0011487
+      },
+      "probability_source": [
+        "logprobs"
+      ],
+      "logprob_mass_mapped_mean": 1.0000001311339333
+    },
+    "reference_model": {
+      "n": 10,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.9,
+        "macro_f1": 0.7818181818181819,
+        "weighted_f1": 0.8545454545454545,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.8333333333333334,
+            "recall": 1.0,
+            "f1": 0.9090909090909091,
+            "support": 5
+          },
+          "CASH_OUT_FRAUD": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 2
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "STRUCTURING_AML": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 5,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "CASH_OUT_FRAUD": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 2,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 1,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 1,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 1,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "CASH_OUT_FRAUD/mule_known_session": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/routine": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "clear": {
+          "n": 9,
+          "accuracy": 1.0
+        }
+      },
+      "calibration": {
+        "brier": 0.1302502095351459,
+        "log_loss": 0.17290616355805427,
+        "ece_top_label": 0.08819170693419441,
+        "reliability": [
+          {
+            "bin": "(0.8,0.9]",
+            "count": 1,
+            "mean_p_pred": 0.8008883632167401,
+            "accuracy": 0.0
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 9,
+            "mean_p_pred": 0.9909968104305329,
+            "accuracy": 1.0
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.9,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.7,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.9,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.8,
+          "settled": 10,
+          "coverage": 1.0,
+          "accuracy": 0.9,
+          "errors": 1,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.85,
+          "settled": 9,
+          "coverage": 0.9,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 9,
+          "coverage": 0.9,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 8,
+          "coverage": 0.8,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 8,
+          "coverage": 0.8,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 1.0,
+        "brier": 0.06461437792660386,
+        "accuracy_at_0_5": 0.9,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 6,
+        "held": 4,
+        "sent_to_review": 0,
+        "fraud_released": 1,
+        "legit_held": 0
+      }
+    },
+    "rules": {
+      "n": 10,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.8,
+        "macro_f1": 0.5666666666666667,
+        "weighted_f1": 0.7166666666666667,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.7142857142857143,
+            "recall": 1.0,
+            "f1": 0.8333333333333334,
+            "support": 5
+          },
+          "CASH_OUT_FRAUD": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 2
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 1
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.0,
+            "recall": 0.0,
+            "f1": 0.0,
+            "support": 1
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 5,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "CASH_OUT_FRAUD": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 2,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 1,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 1,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 1,
+            "CASH_OUT_FRAUD": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "CASH_OUT_FRAUD/mule_known_session": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/routine": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 1,
+          "accuracy": 1.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "clear": {
+          "n": 9,
+          "accuracy": 0.8888888888888888
+        }
+      },
+      "hold_gate": {
+        "auc": 0.8,
+        "brier": 0.2,
+        "accuracy_at_0_5": 0.8,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 7,
+        "held": 3,
+        "sent_to_review": 0,
+        "fraud_released": 2,
+        "legit_held": 0
+      }
+    }
+  },
+  "paired_bootstrap": {
+    "per_model": {
+      "jev": {
+        "macro_f1": [
+          0.26030952380952377,
+          0.8
+        ],
+        "accuracy": [
+          0.5,
+          1.0
+        ]
+      },
+      "gpt-4o-mini": {
+        "macro_f1": [
+          0.0,
+          0.13333333333333333
+        ],
+        "accuracy": [
+          0.0,
+          0.5
+        ]
+      },
+      "rules": {
+        "macro_f1": [
+          0.27999999999999997,
+          0.6
+        ],
+        "accuracy": [
+          0.6,
+          1.0
+        ]
+      },
+      "reference_model": {
+        "macro_f1": [
+          0.36,
+          0.8
+        ],
+        "accuracy": [
+          0.7,
+          1.0
+        ]
+      }
+    },
+    "differences": {
+      "jev - gpt-4o-mini": {
+        "macro_f1": {
+          "ci95": [
+            0.16470588235294117,
+            0.7333333333333334
+          ],
+          "p_a_better": 1.0
+        },
+        "accuracy": {
+          "ci95": [
+            0.29999999999999993,
+            0.9
+          ],
+          "p_a_better": 1.0
+        }
+      },
+      "jev - rules": {
+        "macro_f1": {
+          "ci95": [
+            -0.14480303030303035,
+            0.24615384615384617
+          ],
+          "p_a_better": 0.62
+        },
+        "accuracy": {
+          "ci95": [
+            -0.30000000000000004,
+            0.30000000000000004
+          ],
+          "p_a_better": 0.3355
+        }
+      },
+      "jev - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.1745865800865801,
+            0.0
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.30000000000000004,
+            0.0
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini - rules": {
+        "macro_f1": {
+          "ci95": [
+            -0.5482517482517483,
+            -0.1894736842105263
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.9,
+            -0.3
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.7555555555555556,
+            -0.25
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -1.0,
+            -0.39999999999999997
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "rules - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.2545454545454545,
+            0.0
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.30000000000000004,
+            0.0
+          ],
+          "p_a_better": 0.0
+        }
+      }
+    }
+  }
+}
