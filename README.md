@@ -24,8 +24,37 @@ account. Jev answers two questions in one request:
 | Which typology? `NORMAL`, `MONEY_MULE`, `ACCOUNT_TAKEOVER`, `SYNTHETIC_ID`, `STRUCTURING_AML` | `choice` | label + probability per class |
 | Hold for fraud/AML review before settlement? | `noul` | p(yes) |
 
-GPT-4o-mini gets the same two questions through Structured Outputs. Its class probabilities are read from
-token log-probabilities, not from numbers it writes.
+GPT-4o-mini gets the same two questions through Structured Outputs, in two configurations:
+**label only** (answers immediately) and **reasoning first** (writes 2–4 sentences, then answers).
+Its class probabilities are read from token log-probabilities, not from numbers it writes.
+
+## Results (v2, 500 test alerts, client in Almaty, KZ)
+
+| | Jev | GPT-4o-mini, label only | GPT-4o-mini, reasoning first | Analyst rules (floor) | Supervised (ceiling) |
+|---|---:|---:|---:|---:|---:|
+| Accuracy | **88.4%** | 47.8% | 58.2% | 82.8% | 95.6% |
+| Macro F1 [95% CI] | **0.891** [0.864, 0.914] | 0.474 | 0.577 | 0.831 | 0.960 |
+| Settled at p ≥ 0.85 (accuracy of settled) | 47% (96.6%) | 65% (55.2%) | 86% (59.3%) | – | 91% (98.9%) |
+| Fraud auto-cleared at p ≥ 0.85 | **0** | 0 | 17 | – | 0 |
+| P90 latency, concurrency 8 | **336 ms** | 1,153 ms | 3,890 ms | – | – |
+| Cost per 1,000 alerts | **$0.045** | $0.113 | $0.190 | – | – |
+
+**Repeatability** (same 150 alerts asked twice, in the `main` and `sequential` runs): Jev gave the same label
+146/150 times (largest probability change 0.10). GPT-4o-mini at temperature 0 matched itself 132/150 times label-only
+and 111/150 times reasoning-first.
+
+Full report: [`results/live/main/report.md`](results/live/main/report.md). Unloaded latency (concurrency 1):
+[`results/live/sequential/report.md`](results/live/sequential/report.md). Charts and error analysis:
+[`notebooks/02_results_analysis.ipynb`](notebooks/02_results_analysis.ipynb).
+
+### Revision history (disclosed)
+
+- **v1** ([`results/live/v1/`](results/live/v1/)) used the label `CASH_OUT_FRAUD`. GPT-4o-mini scored 27% because
+  it matched that label to PaySim's `CASH_OUT` transaction type (it labelled 36 `CASH_IN` deposits as cash-out
+  fraud). Jev showed a milder version of the same confusion.
+- **v2** renames the label to `MONEY_MULE` for both models and adds the reasoning-first GPT configuration. The
+  change was decided on the `dev` split (Jev 88% → 91%, GPT 26% → 46% from the rename alone), then the test
+  split was re-run once. The alerts themselves are byte-identical apart from the label string.
 
 ## Data: how the alerts are built
 

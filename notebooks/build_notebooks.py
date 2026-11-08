@@ -259,7 +259,7 @@ for m in PROB:
     ax.plot(xs, ys, color=MODEL_COLORS[m], marker="o", markersize=0, label=MODEL_TITLES[m])
     ax.scatter(xs, ys, s=[12 + 3 * np.sqrt(n) * 4 for n in ns], color=MODEL_COLORS[m], edgecolor="#fcfcfb", linewidth=2, zorder=3)
 ax.set_xlabel("probability of predicted class"); ax.set_ylabel("share correct"); ax.set_xlim(0, 1.02); ax.set_ylim(0, 1.02)
-ax.legend(loc="upper left"); ax.set_title("Reliability", loc="left")
+ax.legend(loc="upper center", bbox_to_anchor=(0.5, -0.14), ncol=2); ax.set_title("Reliability", loc="left")
 plt.show()
 pd.DataFrame({MODEL_TITLES[m]: report["models"][m]["calibration"] for m in PROB}).loc[["brier", "log_loss", "ece_top_label"]]
 """),
@@ -283,7 +283,8 @@ for m in PROB:
     axes[0].scatter([cov[k]], [acc[k]], color=MODEL_COLORS[m], s=60, edgecolor="#fcfcfb", linewidth=2, zorder=3)
     axes[1].plot(cov, missed, color=MODEL_COLORS[m], label=MODEL_TITLES[m])
 axes[0].set_xlabel("share of alerts settled automatically"); axes[0].set_ylabel("accuracy of settled alerts")
-axes[0].set_title("Coverage vs accuracy", loc="left"); axes[0].legend(loc="lower right")
+axes[0].set_title("Coverage vs accuracy", loc="left")
+fig.legend(*axes[0].get_legend_handles_labels(), loc="lower center", bbox_to_anchor=(0.5, -0.1), ncol=len(PROB))
 axes[1].set_xlabel("share of alerts settled automatically"); axes[1].set_ylabel("fraud alerts auto-cleared as NORMAL")
 axes[1].set_title("The costly error: fraud waved through", loc="left")
 plt.show()
@@ -301,10 +302,17 @@ if API:
         t = [r[m]["started_at_s"] for r in rows if r[m]["ok"]]
         l = [r[m]["latency_ms"] for r in rows if r[m]["ok"]]
         axes[1].scatter(t, l, s=10, color=MODEL_COLORS[m], alpha=0.6, label=MODEL_TITLES[m])
-    axes[0].set_xscale("log"); axes[0].set_xlabel("latency (ms, log)"); axes[0].set_ylabel("share of calls ≤ x")
+    from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+    for a in axes:
+        a.set_xscale("log") if a is axes[0] else a.set_yscale("log")
+        axis = a.xaxis if a is axes[0] else a.yaxis
+        axis.set_major_locator(FixedLocator([200, 300, 500, 1000, 2000, 3000, 5000]))
+        axis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
+        axis.set_minor_locator(NullLocator())
+    axes[0].set_xlabel("latency (ms, log)"); axes[0].set_ylabel("share of calls ≤ x")
     axes[0].set_title(f"Latency distribution (concurrency {meta['concurrency_per_model']}/model)", loc="left")
     axes[0].legend(loc="lower right")
-    axes[1].set_yscale("log"); axes[1].set_xlabel("seconds since run start"); axes[1].set_ylabel("latency (ms, log)")
+    axes[1].set_xlabel("seconds since run start"); axes[1].set_ylabel("latency (ms, log)")
     axes[1].set_title("Latency over the run (drift, throttling)", loc="left")
     plt.show()
     display(pd.DataFrame({MODEL_TITLES[m]: report["models"][m]["latency"] for m in API}).T)

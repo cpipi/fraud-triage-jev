@@ -1,0 +1,1656 @@
+{
+  "meta": {
+    "mode": "live",
+    "publishable": true,
+    "timestamp_utc": "2026-11-08T19:29:53+00:00",
+    "wall_clock_s": 503.6,
+    "git": {
+      "commit": "16a8786111ab91d00c9a525101f45216d9c92ce6",
+      "dirty": true
+    },
+    "dataset": {
+      "path": "data/alerts_test.jsonl",
+      "sha256": "be1f0c3a1eca79b2fa338c9435ea73edd3477d1d7ad98a59a50396ca673dc76c",
+      "n": 150,
+      "limit": 150,
+      "sources": [
+        "paysim"
+      ]
+    },
+    "criteria_sha256": "a32857963e83b14d82b850908ff285575f9b56c04fa2c0186f745e378b0a6693",
+    "models_requested": {
+      "jev": "jev-1.14.0",
+      "gpt-4o-mini": "gpt-4o-mini-2024-07-18",
+      "gpt-4o-mini-reasoning": "gpt-4o-mini-2024-07-18"
+    },
+    "models_served": {
+      "jev": [
+        "jev-1.14.0"
+      ],
+      "gpt-4o-mini": [
+        "gpt-4o-mini-2024-07-18"
+      ],
+      "gpt-4o-mini-reasoning": [
+        "gpt-4o-mini-2024-07-18"
+      ]
+    },
+    "concurrency_per_model": 1,
+    "client_region": "Almaty, KZ",
+    "python": "3.12.13",
+    "argv": [
+      "--mode",
+      "live",
+      "--concurrency",
+      "1",
+      "--limit",
+      "150",
+      "--run-name",
+      "sequential",
+      "--client-region",
+      "Almaty, KZ"
+    ],
+    "ambiguous_definition": "reference-model probability of the true class < 0.9"
+  },
+  "models": {
+    "jev": {
+      "n": 150,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.8466666666666667,
+        "macro_f1": 0.8619776895443373,
+        "weighted_f1": 0.8482453665323773,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.9444444444444444,
+            "recall": 0.7391304347826086,
+            "f1": 0.8292682926829268,
+            "support": 69
+          },
+          "MONEY_MULE": {
+            "precision": 0.72,
+            "recall": 1.0,
+            "f1": 0.8372093023255814,
+            "support": 18
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.6206896551724138,
+            "recall": 0.782608695652174,
+            "f1": 0.6923076923076923,
+            "support": 23
+          },
+          "SYNTHETIC_ID": {
+            "precision": 0.9545454545454546,
+            "recall": 1.0,
+            "f1": 0.9767441860465116,
+            "support": 21
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.95,
+            "recall": 1.0,
+            "f1": 0.9743589743589743,
+            "support": 19
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 51,
+            "MONEY_MULE": 5,
+            "ACCOUNT_TAKEOVER": 11,
+            "SYNTHETIC_ID": 1,
+            "STRUCTURING_AML": 1,
+            "ERROR": 0
+          },
+          "MONEY_MULE": {
+            "NORMAL": 0,
+            "MONEY_MULE": 18,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 3,
+            "MONEY_MULE": 2,
+            "ACCOUNT_TAKEOVER": 18,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 21,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 19,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 12,
+          "accuracy": 0.8333333333333334
+        },
+        "ACCOUNT_TAKEOVER/foreign_login": {
+          "n": 6,
+          "accuracy": 1.0
+        },
+        "ACCOUNT_TAKEOVER/session_hijack": {
+          "n": 5,
+          "accuracy": 0.4
+        },
+        "MONEY_MULE/mule_known_session": {
+          "n": 13,
+          "accuracy": 1.0
+        },
+        "MONEY_MULE/mule_new_phone": {
+          "n": 5,
+          "accuracy": 1.0
+        },
+        "NORMAL/large_payment": {
+          "n": 9,
+          "accuracy": 0.6666666666666666
+        },
+        "NORMAL/new_customer": {
+          "n": 2,
+          "accuracy": 0.5
+        },
+        "NORMAL/new_device": {
+          "n": 6,
+          "accuracy": 0.5
+        },
+        "NORMAL/new_device_large_payment": {
+          "n": 6,
+          "accuracy": 0.3333333333333333
+        },
+        "NORMAL/payroll_batch": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "NORMAL/routine": {
+          "n": 32,
+          "accuracy": 0.9375
+        },
+        "NORMAL/traveler": {
+          "n": 10,
+          "accuracy": 0.7
+        },
+        "NORMAL/traveler_no_notice_large": {
+          "n": 3,
+          "accuracy": 0.6666666666666666
+        },
+        "STRUCTURING_AML/classic": {
+          "n": 15,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 14,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/sleeper": {
+          "n": 7,
+          "accuracy": 1.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 21,
+          "accuracy": 0.5714285714285714
+        },
+        "clear": {
+          "n": 129,
+          "accuracy": 0.8914728682170543
+        }
+      },
+      "calibration": {
+        "brier": 0.24885600000000002,
+        "log_loss": 0.5361180001090579,
+        "ece_top_label": 0.09246666666666667,
+        "reliability": [
+          {
+            "bin": "(0.3,0.4]",
+            "count": 2,
+            "mean_p_pred": 0.345,
+            "accuracy": 0.5
+          },
+          {
+            "bin": "(0.4,0.5]",
+            "count": 12,
+            "mean_p_pred": 0.44916666666666666,
+            "accuracy": 0.5
+          },
+          {
+            "bin": "(0.5,0.6]",
+            "count": 22,
+            "mean_p_pred": 0.56,
+            "accuracy": 0.6818181818181818
+          },
+          {
+            "bin": "(0.6,0.7]",
+            "count": 20,
+            "mean_p_pred": 0.6609999999999999,
+            "accuracy": 0.75
+          },
+          {
+            "bin": "(0.7,0.8]",
+            "count": 22,
+            "mean_p_pred": 0.7613636363636364,
+            "accuracy": 0.9545454545454546
+          },
+          {
+            "bin": "(0.8,0.9]",
+            "count": 39,
+            "mean_p_pred": 0.8625641025641025,
+            "accuracy": 0.9487179487179487
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 33,
+            "mean_p_pred": 0.9430303030303031,
+            "accuracy": 0.9696969696969697
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 138,
+          "coverage": 0.92,
+          "accuracy": 0.8768115942028986,
+          "errors": 17,
+          "fraud_auto_cleared": 2
+        },
+        {
+          "tau": 0.7,
+          "settled": 97,
+          "coverage": 0.6466666666666666,
+          "accuracy": 0.9587628865979382,
+          "errors": 4,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.8,
+          "settled": 76,
+          "coverage": 0.5066666666666667,
+          "accuracy": 0.9605263157894737,
+          "errors": 3,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.85,
+          "settled": 62,
+          "coverage": 0.41333333333333333,
+          "accuracy": 0.967741935483871,
+          "errors": 2,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 36,
+          "coverage": 0.24,
+          "accuracy": 0.9722222222222222,
+          "errors": 1,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 15,
+          "coverage": 0.1,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 0,
+          "coverage": 0.0,
+          "accuracy": NaN,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.8492574700304167,
+        "brier": 0.16735933333333336,
+        "accuracy_at_0_5": 0.76,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 21,
+        "held": 65,
+        "sent_to_review": 64,
+        "fraud_released": 1,
+        "legit_held": 11
+      },
+      "latency": {
+        "n": 150,
+        "p50_ms": 299.88681300892495,
+        "p90_ms": 370.90737091493787,
+        "p90_ci95_ms": [
+          336.7994097988412,
+          404.54529130947776
+        ],
+        "p99_ms": 509.32295741396933,
+        "max_ms": 603.0236669466831,
+        "mean_ms": 313.88661944074556,
+        "e2e_p90_ms": 370.93591217417264,
+        "retried_calls": 0
+      },
+      "cost": {
+        "mean_input_tokens": 1063.9266666666667,
+        "mean_output_tokens": 88.48,
+        "usd_per_1k_alerts": 0.044684919999999996,
+        "usd_total": 0.006702738000000001
+      },
+      "probability_source": [
+        "native"
+      ]
+    },
+    "gpt-4o-mini": {
+      "n": 150,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.44666666666666666,
+        "macro_f1": 0.4469607843137255,
+        "weighted_f1": 0.4278431372549019,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 1.0,
+            "recall": 0.2318840579710145,
+            "f1": 0.3764705882352941,
+            "support": 69
+          },
+          "MONEY_MULE": {
+            "precision": 0.1774193548387097,
+            "recall": 0.6111111111111112,
+            "f1": 0.275,
+            "support": 18
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.5806451612903226,
+            "recall": 0.782608695652174,
+            "f1": 0.6666666666666666,
+            "support": 23
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 0.14285714285714285,
+            "f1": 0.25,
+            "support": 21
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.5,
+            "recall": 1.0,
+            "f1": 0.6666666666666666,
+            "support": 19
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 16,
+            "MONEY_MULE": 31,
+            "ACCOUNT_TAKEOVER": 11,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 11,
+            "ERROR": 0
+          },
+          "MONEY_MULE": {
+            "NORMAL": 0,
+            "MONEY_MULE": 11,
+            "ACCOUNT_TAKEOVER": 1,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 6,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 0,
+            "MONEY_MULE": 5,
+            "ACCOUNT_TAKEOVER": 18,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "MONEY_MULE": 15,
+            "ACCOUNT_TAKEOVER": 1,
+            "SYNTHETIC_ID": 3,
+            "STRUCTURING_AML": 2,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 19,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 12,
+          "accuracy": 0.8333333333333334
+        },
+        "ACCOUNT_TAKEOVER/foreign_login": {
+          "n": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "ACCOUNT_TAKEOVER/session_hijack": {
+          "n": 5,
+          "accuracy": 0.6
+        },
+        "MONEY_MULE/mule_known_session": {
+          "n": 13,
+          "accuracy": 0.5384615384615384
+        },
+        "MONEY_MULE/mule_new_phone": {
+          "n": 5,
+          "accuracy": 0.8
+        },
+        "NORMAL/large_payment": {
+          "n": 9,
+          "accuracy": 0.2222222222222222
+        },
+        "NORMAL/new_customer": {
+          "n": 2,
+          "accuracy": 0.0
+        },
+        "NORMAL/new_device": {
+          "n": 6,
+          "accuracy": 0.0
+        },
+        "NORMAL/new_device_large_payment": {
+          "n": 6,
+          "accuracy": 0.0
+        },
+        "NORMAL/payroll_batch": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "NORMAL/routine": {
+          "n": 32,
+          "accuracy": 0.4375
+        },
+        "NORMAL/traveler": {
+          "n": 10,
+          "accuracy": 0.0
+        },
+        "NORMAL/traveler_no_notice_large": {
+          "n": 3,
+          "accuracy": 0.0
+        },
+        "STRUCTURING_AML/classic": {
+          "n": 15,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 14,
+          "accuracy": 0.0
+        },
+        "SYNTHETIC_ID/sleeper": {
+          "n": 7,
+          "accuracy": 0.42857142857142855
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 21,
+          "accuracy": 0.42857142857142855
+        },
+        "clear": {
+          "n": 129,
+          "accuracy": 0.4496124031007752
+        }
+      },
+      "calibration": {
+        "brier": 0.9610881786718077,
+        "log_loss": 4.310058480590987,
+        "ece_top_label": 0.44027384185253765,
+        "reliability": [
+          {
+            "bin": "(0.3,0.4]",
+            "count": 2,
+            "mean_p_pred": 0.38053752345769054,
+            "accuracy": 0.5
+          },
+          {
+            "bin": "(0.4,0.5]",
+            "count": 7,
+            "mean_p_pred": 0.47132330193796024,
+            "accuracy": 0.8571428571428571
+          },
+          {
+            "bin": "(0.5,0.6]",
+            "count": 13,
+            "mean_p_pred": 0.5505695187065277,
+            "accuracy": 0.3076923076923077
+          },
+          {
+            "bin": "(0.6,0.7]",
+            "count": 13,
+            "mean_p_pred": 0.6530165371792092,
+            "accuracy": 0.3076923076923077
+          },
+          {
+            "bin": "(0.7,0.8]",
+            "count": 13,
+            "mean_p_pred": 0.7566614874379525,
+            "accuracy": 0.46153846153846156
+          },
+          {
+            "bin": "(0.8,0.9]",
+            "count": 20,
+            "mean_p_pred": 0.8488779333320802,
+            "accuracy": 0.15
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 82,
+            "mean_p_pred": 0.983422411079417,
+            "accuracy": 0.524390243902439
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 141,
+          "coverage": 0.94,
+          "accuracy": 0.425531914893617,
+          "errors": 81,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.7,
+          "settled": 115,
+          "coverage": 0.7666666666666667,
+          "accuracy": 0.45217391304347826,
+          "errors": 63,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.8,
+          "settled": 102,
+          "coverage": 0.68,
+          "accuracy": 0.45098039215686275,
+          "errors": 56,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.85,
+          "settled": 93,
+          "coverage": 0.62,
+          "accuracy": 0.4946236559139785,
+          "errors": 47,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 82,
+          "coverage": 0.5466666666666666,
+          "accuracy": 0.524390243902439,
+          "errors": 39,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 74,
+          "coverage": 0.49333333333333335,
+          "accuracy": 0.5540540540540541,
+          "errors": 33,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 50,
+          "coverage": 0.3333333333333333,
+          "accuracy": 0.7,
+          "errors": 15,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.6467167650742529,
+        "brier": 0.3533332855168941,
+        "accuracy_at_0_5": 0.6466666666666666,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 16,
+        "held": 134,
+        "sent_to_review": 0,
+        "fraud_released": 0,
+        "legit_held": 53
+      },
+      "latency": {
+        "n": 150,
+        "p50_ms": 924.4045205123257,
+        "p90_ms": 1105.7261127687525,
+        "p90_ci95_ms": [
+          1072.1683375246357,
+          1212.7111045119818
+        ],
+        "p99_ms": 1515.788660098914,
+        "max_ms": 1622.7712499676272,
+        "mean_ms": 962.4132416517629,
+        "e2e_p90_ms": 1106.11706598429,
+        "retried_calls": 0
+      },
+      "cost": {
+        "mean_input_tokens": 700.48,
+        "mean_output_tokens": 12.973333333333333,
+        "usd_per_1k_alerts": 0.11285600000000001,
+        "usd_total": 0.0169284
+      },
+      "probability_source": [
+        "logprobs"
+      ],
+      "logprob_mass_mapped_mean": 1.000000012865614
+    },
+    "gpt-4o-mini-reasoning": {
+      "n": 150,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.6,
+        "macro_f1": 0.6168036497933547,
+        "weighted_f1": 0.5989775068064704,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.9032258064516129,
+            "recall": 0.4057971014492754,
+            "f1": 0.56,
+            "support": 69
+          },
+          "MONEY_MULE": {
+            "precision": 0.34210526315789475,
+            "recall": 0.7222222222222222,
+            "f1": 0.4642857142857143,
+            "support": 18
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.46511627906976744,
+            "recall": 0.8695652173913043,
+            "f1": 0.6060606060606061,
+            "support": 23
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 0.47619047619047616,
+            "f1": 0.6451612903225806,
+            "support": 21
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.6785714285714286,
+            "recall": 1.0,
+            "f1": 0.8085106382978723,
+            "support": 19
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 28,
+            "MONEY_MULE": 16,
+            "ACCOUNT_TAKEOVER": 18,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 7,
+            "ERROR": 0
+          },
+          "MONEY_MULE": {
+            "NORMAL": 0,
+            "MONEY_MULE": 13,
+            "ACCOUNT_TAKEOVER": 3,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 2,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 1,
+            "MONEY_MULE": 2,
+            "ACCOUNT_TAKEOVER": 20,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 2,
+            "MONEY_MULE": 7,
+            "ACCOUNT_TAKEOVER": 2,
+            "SYNTHETIC_ID": 10,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 19,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 12,
+          "accuracy": 1.0
+        },
+        "ACCOUNT_TAKEOVER/foreign_login": {
+          "n": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "ACCOUNT_TAKEOVER/session_hijack": {
+          "n": 5,
+          "accuracy": 0.6
+        },
+        "MONEY_MULE/mule_known_session": {
+          "n": 13,
+          "accuracy": 0.8461538461538461
+        },
+        "MONEY_MULE/mule_new_phone": {
+          "n": 5,
+          "accuracy": 0.4
+        },
+        "NORMAL/large_payment": {
+          "n": 9,
+          "accuracy": 0.7777777777777778
+        },
+        "NORMAL/new_customer": {
+          "n": 2,
+          "accuracy": 0.5
+        },
+        "NORMAL/new_device": {
+          "n": 6,
+          "accuracy": 0.0
+        },
+        "NORMAL/new_device_large_payment": {
+          "n": 6,
+          "accuracy": 0.0
+        },
+        "NORMAL/payroll_batch": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "NORMAL/routine": {
+          "n": 32,
+          "accuracy": 0.625
+        },
+        "NORMAL/traveler": {
+          "n": 10,
+          "accuracy": 0.0
+        },
+        "NORMAL/traveler_no_notice_large": {
+          "n": 3,
+          "accuracy": 0.0
+        },
+        "STRUCTURING_AML/classic": {
+          "n": 15,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 14,
+          "accuracy": 0.42857142857142855
+        },
+        "SYNTHETIC_ID/sleeper": {
+          "n": 7,
+          "accuracy": 0.5714285714285714
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 21,
+          "accuracy": 0.47619047619047616
+        },
+        "clear": {
+          "n": 129,
+          "accuracy": 0.6201550387596899
+        }
+      },
+      "calibration": {
+        "brier": 0.8064444018952966,
+        "log_loss": 4.848313366914865,
+        "ece_top_label": 0.3947006809230854,
+        "reliability": [
+          {
+            "bin": "(0.2,0.3]",
+            "count": 1,
+            "mean_p_pred": 0.265271792463596,
+            "accuracy": 1.0
+          },
+          {
+            "bin": "(0.3,0.4]",
+            "count": 1,
+            "mean_p_pred": 0.3554545391743752,
+            "accuracy": 1.0
+          },
+          {
+            "bin": "(0.4,0.5]",
+            "count": 7,
+            "mean_p_pred": 0.48188742881043733,
+            "accuracy": 0.8571428571428571
+          },
+          {
+            "bin": "(0.5,0.6]",
+            "count": 6,
+            "mean_p_pred": 0.5241222945579299,
+            "accuracy": 0.6666666666666666
+          },
+          {
+            "bin": "(0.6,0.7]",
+            "count": 1,
+            "mean_p_pred": 0.6367616714363916,
+            "accuracy": 0.0
+          },
+          {
+            "bin": "(0.7,0.8]",
+            "count": 4,
+            "mean_p_pred": 0.7657800160799213,
+            "accuracy": 0.5
+          },
+          {
+            "bin": "(0.8,0.9]",
+            "count": 5,
+            "mean_p_pred": 0.8503061270179376,
+            "accuracy": 0.4
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 125,
+            "mean_p_pred": 0.9951388949462052,
+            "accuracy": 0.592
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 141,
+          "coverage": 0.94,
+          "accuracy": 0.5815602836879432,
+          "errors": 59,
+          "fraud_auto_cleared": 3
+        },
+        {
+          "tau": 0.7,
+          "settled": 134,
+          "coverage": 0.8933333333333333,
+          "accuracy": 0.582089552238806,
+          "errors": 56,
+          "fraud_auto_cleared": 3
+        },
+        {
+          "tau": 0.8,
+          "settled": 130,
+          "coverage": 0.8666666666666667,
+          "accuracy": 0.5846153846153846,
+          "errors": 54,
+          "fraud_auto_cleared": 2
+        },
+        {
+          "tau": 0.85,
+          "settled": 128,
+          "coverage": 0.8533333333333334,
+          "accuracy": 0.578125,
+          "errors": 54,
+          "fraud_auto_cleared": 2
+        },
+        {
+          "tau": 0.9,
+          "settled": 125,
+          "coverage": 0.8333333333333334,
+          "accuracy": 0.592,
+          "errors": 51,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.95,
+          "settled": 120,
+          "coverage": 0.8,
+          "accuracy": 0.6,
+          "errors": 48,
+          "fraud_auto_cleared": 1
+        },
+        {
+          "tau": 0.99,
+          "settled": 111,
+          "coverage": 0.74,
+          "accuracy": 0.6126126126126126,
+          "errors": 43,
+          "fraud_auto_cleared": 1
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.770620862408302,
+        "brier": 0.29328382420923654,
+        "accuracy_at_0_5": 0.7066666666666667,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 31,
+        "held": 119,
+        "sent_to_review": 0,
+        "fraud_released": 3,
+        "legit_held": 41
+      },
+      "latency": {
+        "n": 150,
+        "p50_ms": 3249.253666988807,
+        "p90_ms": 3907.0270128024276,
+        "p90_ci95_ms": [
+          3748.549000057537,
+          4042.415424995124
+        ],
+        "p99_ms": 4839.731690284095,
+        "max_ms": 5505.040250020102,
+        "mean_ms": 3327.0528261600216,
+        "e2e_p90_ms": 3914.1371538979,
+        "retried_calls": 0
+      },
+      "cost": {
+        "mean_input_tokens": 745.48,
+        "mean_output_tokens": 128.68,
+        "usd_per_1k_alerts": 0.18903,
+        "usd_total": 0.028354499999999998
+      },
+      "probability_source": [
+        "logprobs"
+      ],
+      "logprob_mass_mapped_mean": 0.9999999050813544
+    },
+    "reference_model": {
+      "n": 150,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.9466666666666667,
+        "macro_f1": 0.9549019607843137,
+        "weighted_f1": 0.9473856209150328,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.9552238805970149,
+            "recall": 0.927536231884058,
+            "f1": 0.9411764705882353,
+            "support": 69
+          },
+          "MONEY_MULE": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 18
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.8,
+            "recall": 0.8695652173913043,
+            "f1": 0.8333333333333334,
+            "support": 23
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 21
+          },
+          "STRUCTURING_AML": {
+            "precision": 1.0,
+            "recall": 1.0,
+            "f1": 1.0,
+            "support": 19
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 64,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 5,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "MONEY_MULE": {
+            "NORMAL": 0,
+            "MONEY_MULE": 18,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 3,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 20,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 21,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 0,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 19,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 12,
+          "accuracy": 0.9166666666666666
+        },
+        "ACCOUNT_TAKEOVER/foreign_login": {
+          "n": 6,
+          "accuracy": 1.0
+        },
+        "ACCOUNT_TAKEOVER/session_hijack": {
+          "n": 5,
+          "accuracy": 0.6
+        },
+        "MONEY_MULE/mule_known_session": {
+          "n": 13,
+          "accuracy": 1.0
+        },
+        "MONEY_MULE/mule_new_phone": {
+          "n": 5,
+          "accuracy": 1.0
+        },
+        "NORMAL/large_payment": {
+          "n": 9,
+          "accuracy": 1.0
+        },
+        "NORMAL/new_customer": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/new_device": {
+          "n": 6,
+          "accuracy": 1.0
+        },
+        "NORMAL/new_device_large_payment": {
+          "n": 6,
+          "accuracy": 0.16666666666666666
+        },
+        "NORMAL/payroll_batch": {
+          "n": 1,
+          "accuracy": 1.0
+        },
+        "NORMAL/routine": {
+          "n": 32,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler": {
+          "n": 10,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler_no_notice_large": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/classic": {
+          "n": 15,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 4,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 14,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/sleeper": {
+          "n": 7,
+          "accuracy": 1.0
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 21,
+          "accuracy": 0.6190476190476191
+        },
+        "clear": {
+          "n": 129,
+          "accuracy": 1.0
+        }
+      },
+      "calibration": {
+        "brier": 0.0655018981079341,
+        "log_loss": 0.10583187614445178,
+        "ece_top_label": 0.0232220281099493,
+        "reliability": [
+          {
+            "bin": "(0.4,0.5]",
+            "count": 1,
+            "mean_p_pred": 0.4965365206161334,
+            "accuracy": 0.0
+          },
+          {
+            "bin": "(0.5,0.6]",
+            "count": 5,
+            "mean_p_pred": 0.560436215999767,
+            "accuracy": 0.4
+          },
+          {
+            "bin": "(0.6,0.7]",
+            "count": 5,
+            "mean_p_pred": 0.6494086052294527,
+            "accuracy": 0.8
+          },
+          {
+            "bin": "(0.7,0.8]",
+            "count": 6,
+            "mean_p_pred": 0.7652924072236621,
+            "accuracy": 0.6666666666666666
+          },
+          {
+            "bin": "(0.8,0.9]",
+            "count": 3,
+            "mean_p_pred": 0.8500878436345035,
+            "accuracy": 1.0
+          },
+          {
+            "bin": "(0.9,1.0]",
+            "count": 130,
+            "mean_p_pred": 0.9953087594583556,
+            "accuracy": 0.9923076923076923
+          }
+        ]
+      },
+      "settlement": [
+        {
+          "tau": 0.5,
+          "settled": 149,
+          "coverage": 0.9933333333333333,
+          "accuracy": 0.9530201342281879,
+          "errors": 7,
+          "fraud_auto_cleared": 2
+        },
+        {
+          "tau": 0.7,
+          "settled": 139,
+          "coverage": 0.9266666666666666,
+          "accuracy": 0.9784172661870504,
+          "errors": 3,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.8,
+          "settled": 133,
+          "coverage": 0.8866666666666667,
+          "accuracy": 0.9924812030075187,
+          "errors": 1,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.85,
+          "settled": 132,
+          "coverage": 0.88,
+          "accuracy": 0.9924242424242424,
+          "errors": 1,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.9,
+          "settled": 130,
+          "coverage": 0.8666666666666667,
+          "accuracy": 0.9923076923076923,
+          "errors": 1,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.95,
+          "settled": 127,
+          "coverage": 0.8466666666666667,
+          "accuracy": 0.9921259842519685,
+          "errors": 1,
+          "fraud_auto_cleared": 0
+        },
+        {
+          "tau": 0.99,
+          "settled": 119,
+          "coverage": 0.7933333333333333,
+          "accuracy": 1.0,
+          "errors": 0,
+          "fraud_auto_cleared": 0
+        }
+      ],
+      "hold_gate": {
+        "auc": 0.9930220075147611,
+        "brier": 0.03259446667908109,
+        "accuracy_at_0_5": 0.9533333333333334,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 63,
+        "held": 77,
+        "sent_to_review": 10,
+        "fraud_released": 0,
+        "legit_held": 3
+      }
+    },
+    "rules": {
+      "n": 150,
+      "errors": 0,
+      "classification": {
+        "accuracy": 0.8266666666666667,
+        "macro_f1": 0.831695113628332,
+        "weighted_f1": 0.8250385703270778,
+        "per_typology": {
+          "NORMAL": {
+            "precision": 0.775,
+            "recall": 0.8985507246376812,
+            "f1": 0.8322147651006712,
+            "support": 69
+          },
+          "MONEY_MULE": {
+            "precision": 1.0,
+            "recall": 0.8888888888888888,
+            "f1": 0.9411764705882353,
+            "support": 18
+          },
+          "ACCOUNT_TAKEOVER": {
+            "precision": 0.631578947368421,
+            "recall": 0.5217391304347826,
+            "f1": 0.5714285714285714,
+            "support": 23
+          },
+          "SYNTHETIC_ID": {
+            "precision": 1.0,
+            "recall": 0.8095238095238095,
+            "f1": 0.8947368421052632,
+            "support": 21
+          },
+          "STRUCTURING_AML": {
+            "precision": 0.9444444444444444,
+            "recall": 0.8947368421052632,
+            "f1": 0.918918918918919,
+            "support": 19
+          }
+        },
+        "confusion": {
+          "NORMAL": {
+            "NORMAL": 62,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 6,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 1,
+            "ERROR": 0
+          },
+          "MONEY_MULE": {
+            "NORMAL": 1,
+            "MONEY_MULE": 16,
+            "ACCOUNT_TAKEOVER": 1,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "ACCOUNT_TAKEOVER": {
+            "NORMAL": 11,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 12,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "SYNTHETIC_ID": {
+            "NORMAL": 4,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 17,
+            "STRUCTURING_AML": 0,
+            "ERROR": 0
+          },
+          "STRUCTURING_AML": {
+            "NORMAL": 2,
+            "MONEY_MULE": 0,
+            "ACCOUNT_TAKEOVER": 0,
+            "SYNTHETIC_ID": 0,
+            "STRUCTURING_AML": 17,
+            "ERROR": 0
+          }
+        }
+      },
+      "by_scenario": {
+        "ACCOUNT_TAKEOVER/domestic_proxy": {
+          "n": 12,
+          "accuracy": 0.5833333333333334
+        },
+        "ACCOUNT_TAKEOVER/foreign_login": {
+          "n": 6,
+          "accuracy": 0.8333333333333334
+        },
+        "ACCOUNT_TAKEOVER/session_hijack": {
+          "n": 5,
+          "accuracy": 0.0
+        },
+        "MONEY_MULE/mule_known_session": {
+          "n": 13,
+          "accuracy": 0.9230769230769231
+        },
+        "MONEY_MULE/mule_new_phone": {
+          "n": 5,
+          "accuracy": 0.8
+        },
+        "NORMAL/large_payment": {
+          "n": 9,
+          "accuracy": 1.0
+        },
+        "NORMAL/new_customer": {
+          "n": 2,
+          "accuracy": 1.0
+        },
+        "NORMAL/new_device": {
+          "n": 6,
+          "accuracy": 0.6666666666666666
+        },
+        "NORMAL/new_device_large_payment": {
+          "n": 6,
+          "accuracy": 0.3333333333333333
+        },
+        "NORMAL/payroll_batch": {
+          "n": 1,
+          "accuracy": 0.0
+        },
+        "NORMAL/routine": {
+          "n": 32,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler": {
+          "n": 10,
+          "accuracy": 1.0
+        },
+        "NORMAL/traveler_no_notice_large": {
+          "n": 3,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/classic": {
+          "n": 15,
+          "accuracy": 1.0
+        },
+        "STRUCTURING_AML/light": {
+          "n": 4,
+          "accuracy": 0.5
+        },
+        "SYNTHETIC_ID/bust_out": {
+          "n": 14,
+          "accuracy": 1.0
+        },
+        "SYNTHETIC_ID/sleeper": {
+          "n": 7,
+          "accuracy": 0.42857142857142855
+        }
+      },
+      "by_difficulty": {
+        "ambiguous": {
+          "n": 21,
+          "accuracy": 0.3333333333333333
+        },
+        "clear": {
+          "n": 129,
+          "accuracy": 0.9069767441860465
+        }
+      },
+      "hold_gate": {
+        "auc": 0.8381642512077294,
+        "brier": 0.16666666666666666,
+        "accuracy_at_0_5": 0.8333333333333334,
+        "band": {
+          "release_le": 0.3,
+          "hold_ge": 0.7
+        },
+        "released": 80,
+        "held": 70,
+        "sent_to_review": 0,
+        "fraud_released": 18,
+        "legit_held": 7
+      }
+    }
+  },
+  "paired_bootstrap": {
+    "per_model": {
+      "jev": {
+        "macro_f1": [
+          0.8062127205489513,
+          0.9102851292995188
+        ],
+        "accuracy": [
+          0.7866666666666666,
+          0.9
+        ]
+      },
+      "gpt-4o-mini": {
+        "macro_f1": [
+          0.3696929643360622,
+          0.5234406716367923
+        ],
+        "accuracy": [
+          0.37333333333333335,
+          0.5333333333333333
+        ]
+      },
+      "gpt-4o-mini-reasoning": {
+        "macro_f1": [
+          0.5310553192644819,
+          0.693557581018925
+        ],
+        "accuracy": [
+          0.52,
+          0.68
+        ]
+      },
+      "rules": {
+        "macro_f1": [
+          0.7683416517590936,
+          0.8853757606547055
+        ],
+        "accuracy": [
+          0.7666666666666667,
+          0.8866666666666667
+        ]
+      },
+      "reference_model": {
+        "macro_f1": [
+          0.920839585745452,
+          0.982157059314954
+        ],
+        "accuracy": [
+          0.9133333333333333,
+          0.98
+        ]
+      }
+    },
+    "differences": {
+      "jev - gpt-4o-mini": {
+        "macro_f1": {
+          "ci95": [
+            0.3353240864817697,
+            0.49115999735087257
+          ],
+          "p_a_better": 1.0
+        },
+        "accuracy": {
+          "ci95": [
+            0.31999999999999995,
+            0.48
+          ],
+          "p_a_better": 1.0
+        }
+      },
+      "jev - gpt-4o-mini-reasoning": {
+        "macro_f1": {
+          "ci95": [
+            0.16962133348973077,
+            0.3287365089689076
+          ],
+          "p_a_better": 1.0
+        },
+        "accuracy": {
+          "ci95": [
+            0.16666666666666663,
+            0.32683333333333253
+          ],
+          "p_a_better": 1.0
+        }
+      },
+      "jev - rules": {
+        "macro_f1": {
+          "ci95": [
+            -0.029616814696963055,
+            0.09852943120634115
+          ],
+          "p_a_better": 0.828
+        },
+        "accuracy": {
+          "ci95": [
+            -0.040000000000000036,
+            0.08666666666666667
+          ],
+          "p_a_better": 0.695
+        }
+      },
+      "jev - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.15371227539509524,
+            -0.03604649618878539
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.16000000000000003,
+            -0.039999999999999925
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini - gpt-4o-mini-reasoning": {
+        "macro_f1": {
+          "ci95": [
+            -0.2532961665594838,
+            -0.08114423698546407
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.22666666666666668,
+            -0.07333333333333336
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini - rules": {
+        "macro_f1": {
+          "ci95": [
+            -0.47704876632335985,
+            -0.2760439243485132
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.47333333333333333,
+            -0.2733333333333333
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.5889533647677068,
+            -0.4291162515056856
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.5800000000000001,
+            -0.41333333333333333
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini-reasoning - rules": {
+        "macro_f1": {
+          "ci95": [
+            -0.3070053685699758,
+            -0.12273409948384816
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.32000000000000006,
+            -0.1266666666666667
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "gpt-4o-mini-reasoning - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.42159300184029574,
+            -0.26321971176654835
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.42666666666666675,
+            -0.2666666666666666
+          ],
+          "p_a_better": 0.0
+        }
+      },
+      "rules - reference_model": {
+        "macro_f1": {
+          "ci95": [
+            -0.1876572725262355,
+            -0.07056960096782176
+          ],
+          "p_a_better": 0.0
+        },
+        "accuracy": {
+          "ci95": [
+            -0.17999999999999994,
+            -0.06666666666666665
+          ],
+          "p_a_better": 0.0
+        }
+      }
+    }
+  }
+}
