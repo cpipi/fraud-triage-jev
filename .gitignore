@@ -24,7 +24,7 @@ results/dry_run/
 .idea/
 .vscode/
 
-# Earlier Gemini-built version, kept locally for reference only
+# Local scratch, not published
 archive/
 
 # Stand-in data is regenerable and not publishable
