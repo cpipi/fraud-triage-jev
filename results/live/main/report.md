@@ -8,7 +8,7 @@
 | Models served | jev: jev-1.14.0; gpt-4o-mini: gpt-4o-mini-2024-07-18; gpt-4o-mini-reasoning: gpt-4o-mini-2024-07-18 |
 | Concurrency / model | 8 |
 | Client region | Almaty, KZ |
-| Git | `16a8786111` |
+| Git | `4d9c4cda12` |
 
 ## Headline (settle when p(predicted class) ≥ 0.85)
 

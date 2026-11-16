@@ -5,8 +5,10 @@
     "timestamp_utc": "2026-11-08T19:29:53+00:00",
     "wall_clock_s": 503.6,
     "git": {
-      "commit": "16a8786111ab91d00c9a525101f45216d9c92ce6",
-      "dirty": true
+      "commit": "4d9c4cda1211179a3613e3abd57654064561a6ae",
+      "dirty": true,
+      "rewritten_from": "16a8786111ab91d00c9a525101f45216d9c92ce6",
+      "note": "History rewritten before publishing (author email only, no code change)."
     },
     "dataset": {
       "path": "data/alerts_test.jsonl",

@@ -90,7 +90,7 @@ NICE = {"NORMAL": "Normal", "MONEY_MULE": "Money mule", "ACCOUNT_TAKEOVER": "Acc
 fig, axes = plt.subplots(2, 3, figsize=(12, 6.2), constrained_layout=True)
 for ax, (col, title, log) in zip(axes.flat, panels):
     data = [df.loc[df.typology == t, col].clip(lower=0.1 if log else None) for t in TYPOLOGIES]
-    bp = ax.boxplot(data, vert=False, whis=(5, 95), showfliers=False, widths=0.55, patch_artist=True)
+    bp = ax.boxplot(data, orientation="horizontal", whis=(5, 95), showfliers=False, widths=0.55, patch_artist=True)
     for patch, t in zip(bp["boxes"], TYPOLOGIES):
         patch.set(facecolor=TYPOLOGY_COLORS[t], alpha=0.85, edgecolor="#fcfcfb")
     for k in ("medians",):
