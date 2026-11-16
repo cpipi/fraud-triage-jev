@@ -159,7 +159,7 @@ def main() -> None:
     p.add_argument("--concurrency", type=int, default=8, help="Max in-flight requests per model")
     p.add_argument("--run-name", default=None)
     p.add_argument("--client-region", default=os.getenv("CLIENT_REGION", "unspecified"),
-                   help="Where the benchmark client runs, e.g. 'Almaty, KZ (home fiber)'")
+                   help="Where the benchmark client runs, e.g. 'Almaty, KZ'")
     p.add_argument("--allow-stand-in", action="store_true",
                    help="Permit live calls on synthetic stand-in data (never publish such results)")
     args = p.parse_args()

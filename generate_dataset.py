@@ -8,7 +8,7 @@ How an alert is made
 1. A ground-truth typology and a scenario within it are drawn (e.g. NORMAL/traveler,
    ACCOUNT_TAKEOVER/domestic_proxy). The label is the scenario that generated the
    alert. It is never derived from rules applied to the features.
-2. The `transaction` block is a real PaySim row, picked from a pool chosen by a
+2. The `transaction` block is an unmodified PaySim row (PaySim is itself a simulation), picked from a pool chosen by a
    published rule (see `PAYSIM_POOLS`). PaySim's own `isFraud` / `isFlaggedFraud`
    columns are dropped from the model input.
 3. The `signals` block (session, device, identity, 24h velocity) is drawn from

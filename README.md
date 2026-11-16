@@ -4,7 +4,11 @@
 
 Payment fraud alerts need a decision in the payment path: settle, hold, or send to an analyst, and
 which fraud typology to route to. This repository benchmarks TypeSafe's decision model **Jev**
-(`POST https://api.typesafe.ai/v1/systemone`) against **GPT-4o-mini** on that task, measuring:
+(`POST https://api.typesafe.ai/v1/systemone`) against **GPT-4o-mini** on that task.
+
+It is a **controlled benchmark on simulated alerts**: it measures how well each model reads structured
+fraud signals against a written rubric. It does not measure fraud detection on real bank data (see
+[How synthetic is this?](#how-synthetic-is-this)). It measures:
 
 - **F1 per typology** (5 fixed classes),
 - **alerts settled automatically at high confidence**, and how many of those were wrong,
@@ -60,10 +64,13 @@ Full report: [`results/live/main/report.md`](results/live/main/report.md). Unloa
 
 A benchmark like this is only as convincing as its labels, so the design starts there.
 
-- **Transactions are real PaySim rows.** [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1)
-  is a public mobile-money simulation (Lopez-Rojas et al., 2016; CC BY-SA 4.0). Each scenario draws
-  from a published pool, for example "PaySim rows flagged `isFraud`" or "non-fraud transfers of
-  $8k–$10k". PaySim's fraud flags are never shown to a model.
+- **Transactions are unmodified PaySim rows.** [PaySim](https://www.kaggle.com/datasets/ealaxi/paysim1)
+  is a public, *simulated* mobile-money dataset (Lopez-Rojas et al., 2016; CC BY-SA 4.0), calibrated
+  on real transaction logs. Each scenario draws from a published pool, for example "PaySim rows
+  flagged `isFraud`" or "non-fraud transfers of $8k–$10k". PaySim's fraud flags are never shown to a
+  model.
+- **The 19 signals are generated here.** Session, device, identity and velocity signals are drawn
+  from distributions written for each scenario.
 - **Labels are the scenario that generated the alert.** They are never inferred by rules over the
   features. There are 17 scenarios across the 5 typologies (see
   [`generate_dataset.py`](generate_dataset.py)).
@@ -79,6 +86,28 @@ A benchmark like this is only as convincing as its labels, so the design starts 
 - **Splits:** `test` has 500 alerts (seed 42) and is the reported benchmark. `dev` has 100 alerts
   (seed 7) and is the only split used when wording criteria. `reference` has 10,000 alerts (seed
   1234) and is used only to train the ceiling model.
+
+## How synthetic is this?
+
+Mostly. Public fraud data labelled by typology (mule vs. takeover vs. synthetic identity vs.
+structuring) is essentially unavailable, so the labels and signals here are simulated by design. To
+show how much each part carries, the supervised model is retrained on one part of the input at a time
+([`notebooks/01_dataset_analysis.ipynb`](notebooks/01_dataset_analysis.ipynb), section 5):
+
+| Supervised model trained on | Test accuracy |
+|---|---:|
+| All 28 fields | 97.6% |
+| The 19 generated signals only | 92.6% |
+| The 9 PaySim transaction fields only | 66.6% |
+
+So the generated signals decide most labels; PaySim contributes realistic transaction shapes. One
+PaySim property also matters: 97% of its fraud rows move exactly the full balance, which no other
+pool does. Every model can use that cue, and Jev is more accurate on alerts built from PaySim fraud
+rows (96%) than on partial-drain alerts (73%).
+
+What the benchmark supports: a like-for-like comparison of models on the same fully specified task
+(accuracy, calibration, latency, cost, repeatability). What it does not support: claims about
+fraud-detection rates at a real institution.
 
 ## Measurement rules
 
@@ -140,12 +169,28 @@ tests/                     offline tests (generator, parsers, metric conventions
 
 ## Limitations
 
-- **The signals are synthetic.** Only the transaction block is real PaySim data. The labels describe
-  how this generator behaves, not how fraud is distributed at a real bank. The benchmark compares
-  models on a shared, fully specified task; it does not predict production fraud-detection rates.
+- **Simulated data.** The signals and labels are generated here and the transactions come from a
+  simulator (see [How synthetic is this?](#how-synthetic-is-this)). Results describe this task, not
+  production fraud-detection rates.
+- **The hold band is untuned.** With TypeSafe's suggested 0.30 / 0.70 band, Jev sends 207 of 500
+  alerts (41%) to an analyst. A band tuned on the `dev` split would likely review fewer.
+- **Sample size.** 500 test alerts give per-typology F1 intervals of several points; the confidence
+  intervals are reported.
+- **GPT-4o-mini is the agreed baseline,** not the newest small LLM. Other models can be added as
+  clients in `triage/clients.py`.
 - **PaySim quirks.** Amounts are in simulated local currency, treated here as USD. Some balance
   fields are inconsistent in the original data, and those quirks are kept.
 - **Latency depends on where the client runs.** Each report records the client region; tail
   latencies from 500 calls carry a confidence interval, also reported.
 - **GPT-4o-mini probabilities come from the first token of the label.** Labels that share a first
   token split that token's probability equally. The average mass mapped to a label is reported.
+
+## How this was built
+
+Built with AI coding assistance (Claude). The design, the experiments, the review of results and the
+decisions documented above (including the v1 → v2 correction) are by Anuar Sultan.
+
+## License
+
+Code: [MIT](LICENSE). The alert files in `data/` contain rows from PaySim and are shared under
+[CC BY-SA 4.0](data/LICENSE.md), as PaySim's license requires.

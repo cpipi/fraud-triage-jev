@@ -53,7 +53,7 @@ from triage.schema import TYPOLOGIES
 DATA = data_dir()
 test = load_jsonl(DATA / "alerts_test.jsonl")
 reference = load_jsonl(DATA / "alerts_reference.jsonl")
-print(f"{len(test)} test alerts, {len(reference)} reference alerts from {DATA}")
+print(f"{len(test)} test alerts, {len(reference)} reference alerts from {DATA.relative_to(ROOT)}")
 print("transaction source:", sorted({a['provenance']['source'] for a in test}))
 """),
     md("## 1 · Class and scenario mix"),
@@ -191,6 +191,31 @@ plt.show()
     md("### Where the analyst rules go wrong"),
     code("""
 pd.crosstab(pd.Series(y_test, name="truth"), pd.Series(rules_pred, name="rules"))
+"""),
+    md("""
+## 5 · How much do the PaySim rows contribute?
+
+The supervised model is retrained on one part of the input at a time. If the generated signals alone
+reach nearly the full accuracy, the labels are mostly decided by the simulation written here, and PaySim
+mainly contributes realistic transaction shapes.
+"""),
+    code("""
+from sklearn.ensemble import HistGradientBoostingClassifier
+X_ref, y_ref = baselines.to_xy(reference)
+names = baselines.FEATURE_NAMES
+txn_cols = [i for i, n in enumerate(names) if n in ("amount_log", "drain_ratio", "orig_balance_log",
+            "dest_old_balance_zero", "dest_is_merchant") or n.startswith("type_")]
+sig_cols = [i for i in range(len(names)) if i not in txn_cols]
+rows = []
+for label, cols in [("all fields", list(range(len(names)))), ("generated signals only", sig_cols),
+                    ("PaySim transaction only", txn_cols)]:
+    m = HistGradientBoostingClassifier(max_iter=400, learning_rate=0.05, random_state=0).fit(X_ref[:, cols], y_ref)
+    rows.append({"trained on": label, "test accuracy": float(np.mean(m.predict(X_test[:, cols]) == y_idx))})
+display(pd.DataFrame(rows))
+
+full_drain = df.drain_ratio.sub(1).abs() < 1e-4
+print("share of alerts moving exactly the full balance, by PaySim pool:")
+print(full_drain.groupby(df.pool).mean().round(2).to_string())
 """),
 ]
 

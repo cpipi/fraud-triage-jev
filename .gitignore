@@ -3,9 +3,8 @@
 .env.*
 *.key
 
-# Private correspondence and working notes (not for the public repo)
-docs/pedro_*.md
-docs/claude_system_prompt.md
+# Private notes and correspondence (not for the public repo)
+docs/private/
 
 # Python
 .venv/
