@@ -32,6 +32,25 @@ GPT-4o-mini gets the same two questions through Structured Outputs, in two confi
 **label only** (answers immediately) and **reasoning first** (writes 2–4 sentences, then answers).
 Its class probabilities are read from token log-probabilities, not from numbers it writes.
 
+**GPT-4o-mini setup** (code in [`triage/clients.py`](triage/clients.py), prompt in [`triage/schema.py`](triage/schema.py)):
+
+| | Label only | Reasoning first |
+|---|---|---|
+| Model | `gpt-4o-mini-2024-07-18` | `gpt-4o-mini-2024-07-18` |
+| Endpoint | Chat Completions, Structured Outputs (strict `json_schema`) | same |
+| System prompt | `build_llm_system_prompt()`: the same instructions and criteria text Jev receives | the same prompt plus `REASONING_INSTRUCTION` (below) |
+| Output schema | `{typology, hold}` | `{reasoning, typology, hold}`, with `reasoning` first so it is written before the label |
+| User message | the alert JSON (`transaction`, `signals`) | same |
+| Sampling | `temperature=0`, `seed=42`, `logprobs=true`, `top_logprobs=20` | same |
+| `max_tokens` | 40 | 400 |
+
+The reasoning instruction, appended verbatim:
+
+> First write 2-4 sentences in `reasoning` weighing the signals for and against each plausible
+> typology, then give `typology` and `hold`.
+
+Both prompts and the Jev criteria are hashed together into the `criteria_sha256` that every report records.
+
 ## Results (v2, 500 test alerts, client in Almaty, KZ)
 
 | | Jev | GPT-4o-mini, label only | GPT-4o-mini, reasoning first | Analyst rules (floor) | Supervised (ceiling) |
@@ -42,6 +61,23 @@ Its class probabilities are read from token log-probabilities, not from numbers 
 | Fraud auto-cleared at p ≥ 0.85 | **0** | 0 | 17 | – | 0 |
 | P90 latency, concurrency 8 | **336 ms** | 1,153 ms | 3,890 ms | – | – |
 | Cost per 1,000 alerts | **$0.045** | $0.113 | $0.190 | – | – |
+
+### F1 per typology
+
+| Typology | n | Jev | GPT-4o-mini, label only | GPT-4o-mini, reasoning first | Analyst rules (floor) | Supervised (ceiling) |
+|---|---:|---:|---:|---:|---:|---:|
+| `NORMAL` | 200 | 0.866 | 0.340 | 0.562 | 0.813 | 0.945 |
+| `MONEY_MULE` | 75 | 0.839 | 0.364 | 0.406 | 0.937 | 0.993 |
+| `ACCOUNT_TAKEOVER` | 75 | 0.821 | 0.698 | 0.667 | 0.635 | 0.887 |
+| `SYNTHETIC_ID` | 75 | 0.966 | 0.273 | 0.500 | 0.874 | 1.000 |
+| `STRUCTURING_AML` | 75 | 0.962 | 0.694 | 0.750 | 0.894 | 0.974 |
+
+Jev's weak spots:
+- **`MONEY_MULE`**: precision is 0.74. Recall is 0.97, so Jev catches nearly every mule, but it also labels some legitimate large transfers as mules. The analyst rules do better on this class (0.937).
+- **`NORMAL`**: recall is 0.80. One in five legitimate alerts gets a fraud label. Payroll split into near-threshold transfers scored 0 of 6.
+- **`ACCOUNT_TAKEOVER`**: lowest F1 (0.821). This is where the look-alike scenarios sit.
+
+Precision and recall for every model are in [`report.md`](results/live/main/report.md#f1-per-typology).
 
 **Repeatability** (same 150 alerts asked twice, in the `main` and `sequential` runs): Jev gave the same label
 146/150 times (largest probability change 0.10). GPT-4o-mini at temperature 0 matched itself 132/150 times label-only
