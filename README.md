@@ -3,7 +3,7 @@
 **Author:** Anuar Sultan · built with [Eventum AI](https://eventum.ai)
 
 Payment fraud alerts need a decision in the payment path: settle, hold, or send to an analyst, and
-which fraud typology to route to. This repository benchmarks TypeSafe's decision model **Jev**
+which fraud typology to route to. This repository benchmarks TypeSafe's decision model **Jev** (TypeSafe calls it a System One model)
 (`POST https://api.typesafe.ai/v1/systemone`) against **GPT-4o-mini** on that task.
 
 It is a **controlled benchmark on simulated alerts**: it measures how well each model reads structured
