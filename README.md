@@ -16,7 +16,8 @@ fraud signals against a written rubric. It does not measure fraud detection on r
 - **cost per 1,000 alerts**.
 
 Both models receive the same alert JSON and the same criteria text. Results are in
-[`results/live/`](results/live/); the analysis is in [`notebooks/`](notebooks/).
+[`results/live/`](results/live/); the analysis is in [`notebooks/`](notebooks/). A write-up is on
+[Eventum.ai](https://www.eventum.ai/jev-builds/fraud-alert-triage).
 
 ## The task
 
